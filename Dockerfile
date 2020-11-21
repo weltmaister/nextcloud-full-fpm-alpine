@@ -4,14 +4,15 @@ RUN set -ex; \
     \
     apk add --no-cache \
         ffmpeg \
-		ghostscript \
+        ghostscript \
         imagemagick \
         procps \
         samba-client \
         supervisor \
-		zlib \
-		tesseract-ocr \
-		tesseract-ocr-data-deu \
+        zlib \
+	unrar \
+        tesseract-ocr \
+        tesseract-ocr-data-deu \
 #       libreoffice \
     ;
 
