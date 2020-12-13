@@ -23,7 +23,7 @@ RUN set -ex; \
         libtool \
         imap-dev \
         krb5-dev \
-        libressl-dev \
+        openssl-dev \
         samba-dev \
         bzip2-dev \
     ; \
@@ -34,11 +34,10 @@ RUN set -ex; \
         imap \
     ; \
     pecl install smbclient; \
-	pecl install inotify; \
+    pecl install inotify; \
     docker-php-ext-enable \
 		inotify \
-		smbclient \
-    ; \
+		smbclient; \
     \
     runDeps="$( \
         scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
