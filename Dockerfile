@@ -14,6 +14,8 @@ RUN set -ex; \
         tesseract-ocr \
         tesseract-ocr-data-deu \
 #       libreoffice \
+        gnu-libiconv \
+	php7-iconv \
     ;
 
 RUN set -ex; \
@@ -49,8 +51,8 @@ RUN set -ex; \
     apk del .build-deps
 
 
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted gnu-libiconv
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+#RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted gnu-libiconv
+#ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 
 RUN mkdir -p \
@@ -61,5 +63,6 @@ RUN mkdir -p \
 COPY supervisord.conf /
 
 ENV NEXTCLOUD_UPDATE=1
+ENV LD_PRELOAD=/usr/lib/preloadable_libiconv.so
 
 CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]
