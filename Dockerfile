@@ -16,6 +16,7 @@ RUN set -ex; \
 #       libreoffice \
         gnu-libiconv \
 	php7-iconv \
+	htop \
     ;
 
 RUN set -ex; \
