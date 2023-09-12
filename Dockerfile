@@ -1,8 +1,9 @@
-FROM nextcloud:fpm-alpine
+FROM nextcloud:production-fpm-alpine
 
 RUN set -ex; \
     \
     apk add --no-cache \
+    	ocrmypdf \
         ffmpeg \
         ghostscript \
         imagemagick \
@@ -10,13 +11,13 @@ RUN set -ex; \
         samba-client \
         supervisor \
         zlib \
-	unrar \
         tesseract-ocr \
         tesseract-ocr-data-deu \
 #       libreoffice \
         gnu-libiconv \
-	php7-iconv \
-	htop \
+		py3-pip \
+
+		
     ;
 
 RUN set -ex; \
@@ -50,10 +51,8 @@ RUN set -ex; \
     )"; \
     apk add --virtual .nextcloud-phpext-rundeps $runDeps; \
     apk del .build-deps
-
-
-#RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted gnu-libiconv
-#ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+	
+RUN pip install pytest-metadata
 
 
 RUN mkdir -p \
@@ -61,15 +60,8 @@ RUN mkdir -p \
     /var/run/supervisord \
 ;
 
-RUN { \
-      echo 'redis.session.locking_enabled = 1'; \
-      echo 'redis.session.lock_retries = -1'; \
-      echo 'redis.session.lock_wait_time = 10000'; \
-    } > /usr/local/etc/php/conf.d/redis-session-locking.ini;
     
-COPY supervisord.conf /
+RUN wget -P / https://github.com/nextcloud/docker/raw/master/.examples/dockerfiles/full/fpm-alpine/supervisord.conf
 
 ENV NEXTCLOUD_UPDATE=1
-ENV LD_PRELOAD=/usr/lib/preloadable_libiconv.so
-
 CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]
